@@ -159,10 +159,12 @@ if args.output == 'stdout':
     to_csv_format(allID, mat_corr, outfile)
 else:
     print("Printing to file...")
-    outfile1 = open(args.output + "_no_corr.csv", 'w')
-    to_csv_format(allID, mat_no_corr, outfile1)
+    outfile1 = open(args.output + "_no_corr.phylip", 'w')
+    to_phylip_format(allID, mat_no_corr, outfile1)
     outfile1.close()
-    outfile2 = open(args.output + "_corr.csv", 'w')
-    to_csv_format(allID, mat_corr, outfile2)
+    outfile2 = open(args.output + "_corr.phylip", 'w')
+    to_phylip_format(allID, mat_corr, outfile2)
     outfile2.close()
+    np.save(args.output + "_no_corr.npy", mat_no_corr)
+    np.save(args.output + "_corr.npy", mat_corr)
 
