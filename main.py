@@ -88,12 +88,18 @@ for i in range(len(allID)):
     for j in range(i+1, len(allID)):
         id1 = allID[i]
         id2 = allID[j]
-        mat[id1][id2]['prob_mut'] = mat[id1][id2]['total_mut'] / mat[id1][id2]['total_len']
-        mat[id1][id2]['d'] = -3/4 * log(1 - 4/3 * mat[id1][id2]['prob_mut'])
-        mat[id1][id2]['data_point'] = np.array([x / SEQ_LIMIT for x in mat[id1][id2]['data_point']])
-        mat[id1][id2]['gamma']['param'] = get_gamma_param(mat[id1][id2]['data_point'])
-        # mat[id1][id2]['gamma']['alpha'] = mat[id1][id2]['gamma']['param'][0]
-        mat[id1][id2]['gamma']['alpha'] = 1 / np.var(mat[id1][id2]['data_point'] / np.mean(mat[id1][id2]['data_point']))
+        if mat[id1][id2]['total_len'] == 0:
+            allID.remove(id1)
+            allID.remove(id2)
+            del mat[id1][id2]
+            del mat[id2][id1]
+        else:
+            mat[id1][id2]['prob_mut'] = mat[id1][id2]['total_mut'] / mat[id1][id2]['total_len']
+            mat[id1][id2]['d'] = -3/4 * log(1 - 4/3 * mat[id1][id2]['prob_mut'])
+            mat[id1][id2]['data_point'] = np.array([x / SEQ_LIMIT for x in mat[id1][id2]['data_point']])
+            mat[id1][id2]['gamma']['param'] = get_gamma_param(mat[id1][id2]['data_point'])
+            # mat[id1][id2]['gamma']['alpha'] = mat[id1][id2]['gamma']['param'][0]
+            mat[id1][id2]['gamma']['alpha'] = 1 / np.var(mat[id1][id2]['data_point'] / np.mean(mat[id1][id2]['data_point']))
 
 # no correction: from D to matrix
 mat_no_corr = list()
@@ -168,3 +174,5 @@ else:
     np.save(args.output + "_no_corr.npy", mat_no_corr)
     np.save(args.output + "_corr.npy", mat_corr)
 
+print("All id(s):")
+print(allID)
