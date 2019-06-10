@@ -1,5 +1,7 @@
 import scipy as sp
 import scipy.stats
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 # return a tuple (mutation count, length)
@@ -31,7 +33,7 @@ def mutation_count_mismatch(r, s):
 
 def segment_mut_count_pair_not(r, s, l):
     assert len(r) == len(s)
-    assert len(r) > l
+    assert len(r) >= l
     result = list()
     for i in range(int(len(r) / l)):
         first_seq = r[l * i: l * (i + 1) - 1]
@@ -42,7 +44,7 @@ def segment_mut_count_pair_not(r, s, l):
 
 def segment_mut_count_mismatch(r, s, l):
     assert len(r) == len(s)
-    assert len(r) > l
+    assert len(r) >= l
     result = list()
     for i in range(int(len(r) / l)):
         first_seq = r[l * i: l * (i + 1) - 1]
@@ -61,6 +63,34 @@ def mutation_count_all_not(block, s):
 # TODO: all not
 def segment_mut_count_all_not(r, s, l):
     return 0
+
+
+# TODO: process alignment block for all not strategy
+def process_block_all_not(block):
+    allSeq = [record for record in block]
+    idx = set()
+    for seq in block:
+        for i in range(len(seq)):
+            if seq[i] == '-':
+                idx.add(i)
+
+    newSeq = [list() for i in range(len(block))]
+
+    for i in range(block.get_alignment_length()):
+        if i not in idx:
+            for j in range(len(block)):
+                newSeq[j].append(allSeq[j][i])
+    newSeq = [SeqRecord(Seq(''.join(seq))) for seq in newSeq]
+
+    for i in range(len(block)):
+        newSeq[i].id = allSeq[i].id
+
+        # SeqRecord(Seq("MKQHKAMIVALIVICITAVVAALVTRKDLCEVHIRTGQTEVAVF",
+        #               IUPAC.protein),
+        #           id="YP_025292.1", name="HokC",
+        #           description="toxic membrane protein, small")
+
+    return newSeq
 
 
 # take a list of data point and return the variance alpha of a gamma distribution
