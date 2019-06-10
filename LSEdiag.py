@@ -84,6 +84,6 @@ if __name__ == "__main__":
             errs_fm[l1] = tot_fm
         print("%s\t%s\t%s\t%s\t%s"% ("Organism", "FM", "FM-%", "LSE", "LSE-%"))
         for k,v in sorted(errs_fm.items(), key=lambda kv: -kv[1]/glob_fm):
-            print("%s\t%.4f\t%.4f\t%.4f\t%.4f" % (k,v,v/glob_fm,errs[k],errs[k]/glob))
+            print("%s\t%.10f\t%.10f\t%.10f\t%.10f" % (k,v,v/glob_fm,errs[k],errs[k]/glob))
     except:
         import pdb,traceback; traceback.print_exc(); pdb.set_trace()
