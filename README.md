@@ -1,4 +1,4 @@
-# ECE-208-project
+# ECE-208-project: SlowME
 
 [main.py](main.py) will take as input the following items:
 * `-m`: The path to a [maf file](https://genome.ucsc.edu/FAQ/FAQformat.html#format5) containing multiple sequence alignment
